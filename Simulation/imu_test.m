@@ -12,8 +12,12 @@ imu = imu_model();
 % angvel(:,1) = sin(2*pi*Fc*t);
 
 % Trajectory 1
+% Fs = imu.SampleRate;
+% [~,~,~,acc,angvel,t,~,~] = trajectory1(Fs);
+
+% Trajectory 2
 Fs = imu.SampleRate;
-[~,~,~,acc,angvel,t,~,~] = trajectory1(Fs);
+[~,~,~,acc,angvel,t,~,~] = trajectory2(Fs);
 
 % Sensor response
 [accelData, gyroData, magData] = imu(acc, angvel);
