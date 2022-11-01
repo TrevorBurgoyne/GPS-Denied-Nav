@@ -10,16 +10,13 @@ function [pos, orient, vel, acc, angvel, times, wps, t] = trajectory1(Fs)
     %   waypoints are reached. `pos, orient, vel, acc, angvel, times`
     %   will have the full trajectory details at each `times` entry.
 
-    [wps1, t1] = launch_trajectory(); % start with the launch
-    x0 = wps1(end,1);  % m, trajectory starting x position
-    z0 = wps1(end,3);  % m, trajectory starting z position
-    t0 = t1(end);      % s, trajectory start time (end of launch phase)
+    [wps1, t1, x0, y0, z0, t0] = launch_trajectory(); % start with the launch
     tf = 20*60;        % s, 20 min flight
     v  = 100;          % m/s, steady flight speed
     xf = x0+v*(tf-t0); % m, final x position
 
     % Waypoints (m)
-    wps2 = [xf, 0, z0];
+    wps2 = [xf, y0, z0];
     wps = [wps1', wps2']'; % append to launch
     
     % Times (s)
