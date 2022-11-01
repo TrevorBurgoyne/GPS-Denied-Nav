@@ -2,13 +2,20 @@
 % GPS Denied Navigation, AEM 4331 Fall 2022
 
 imu = imu_model();
-N = 1000;
-Fc = .25; % sinusoidal frequency
-t = (0:(1/imu.SampleRate):((N-1)/imu.SampleRate)).';
-acc = zeros(N,3);
-angvel = zeros(N,3);
-angvel(:,1) = sin(2*pi*Fc*t);
 
+% Spin
+% N = 1000;
+% Fc = .25; % sinusoidal frequency
+% t = (0:(1/imu.SampleRate):((N-1)/imu.SampleRate)).';
+% acc = zeros(N,3);
+% angvel = zeros(N,3);
+% angvel(:,1) = sin(2*pi*Fc*t);
+
+% Trajectory 1
+Fs = imu.SampleRate;
+[~,~,~,acc,angvel,t,~,~] = trajectory1(Fs);
+
+% Sensor response
 [accelData, gyroData, magData] = imu(acc, angvel);
 
 subplot(3, 1, 1)
