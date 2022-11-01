@@ -4,7 +4,6 @@
 % https://aerospace.honeywell.com/content/dam/aerobt/en/documents/learn/products/sensors/brochures/N61-2427-000-001_HG1125_HG1126-bro.pdf
 
 %% IMU
-% Usage
 function imu = imu_model(sample_rate)
     % imuSensor model for a HG1125CA01 sensor.
     %   USAGE: `imu = imu_model();` will initialize a imuSensor model
