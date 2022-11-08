@@ -1,9 +1,11 @@
 %% IMU Test
 % GPS Denied Navigation, AEM 4331 Fall 2022
 
-imu = imu_model();
-gps = gps_model();
-Fs = imu.SampleRate;
+imu   = imu_model();
+imuFs = imu.SampleRate;
+
+gps   = gps_model();
+gpsFs = gps.SampleRate;
 
 % Spin
 % N = 1000;
@@ -19,17 +21,22 @@ Fs = imu.SampleRate;
 % [pos,~,~,acc,angvel,t,~,~] = trajectory1(Fs);
 
 % Trajectory 2
-[pos,~,vel,acc,angvel,t,~,~] = trajectory2(Fs);
-% [lat, lon] = local2latlon(pos(:,1), pos(:,2), pos(:,3), gps.ReferenceLocation);
-% lla = [lat lon pos(:,3)]; % Lat, Lon, Alt
+[pos,~,vel,acc,angvel,t,~,~] = trajectory2(imuFs);
 
-% Sensor response
+
+% IMU
 [accelData, gyroData, magData] = imu(acc, angvel);
-[gps_lla,~,~,~] = gps(pos,vel);
+
+% GPS
+scaledFs = imuFs / gpsFs; % Number of imu cycles per gps update
+scaledPos = pos(1:scaledFs:end,:); % Scale down
+scaledVel = vel(1:scaledFs:end,:);
+scaledT   = t(1:scaledFs:end);
+[gps_lla,~,~,~] = gps(scaledPos,scaledVel);
 [East,North,Up] = latlon2local(gps_lla(:,1), gps_lla(:,2), gps_lla(:,3), gps.ReferenceLocation);
 gps_pos = [North, East, -Up];
 
-err = gps_pos - pos;
+gps_err = gps_pos - scaledPos;
 
 
 n_row = 3;
@@ -58,7 +65,7 @@ legend('x','y','z')
 subplot(n_row, n_col, 4)
 hold on
 plot(t, pos(:,1), 'DisplayName','Truth')
-plot(t, gps_pos(:,1), 'DisplayName','GPS')
+plot(scaledT, gps_pos(:,1), 'DisplayName','GPS')
 title('x Position')
 xlabel('s')
 ylabel('m')
@@ -67,7 +74,7 @@ legend('show','Location','best');
 subplot(n_row, n_col, 5)
 hold on
 plot(t, pos(:,2), 'DisplayName','Truth')
-plot(t, gps_pos(:,2), 'DisplayName','GPS')
+plot(scaledT, gps_pos(:,2), 'DisplayName','GPS')
 title('y Position')
 xlabel('s')
 ylabel('m')
@@ -76,7 +83,7 @@ legend('show','Location','best');
 subplot(n_row, n_col, 6)
 hold on
 plot(t, pos(:,3), 'DisplayName','Truth')
-plot(t, gps_pos(:,3), 'DisplayName','GPS')
+plot(scaledT, gps_pos(:,3), 'DisplayName','GPS')
 title('z Position')
 xlabel('s')
 ylabel('m')
