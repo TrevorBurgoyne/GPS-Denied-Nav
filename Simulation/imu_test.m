@@ -2,6 +2,7 @@
 % GPS Denied Navigation, AEM 4331 Fall 2022
 
 imu = imu_model();
+gps = gps_model();
 Fs = imu.SampleRate;
 
 % Spin
@@ -18,49 +19,62 @@ Fs = imu.SampleRate;
 % [pos,~,~,acc,angvel,t,~,~] = trajectory1(Fs);
 
 % Trajectory 2
-[pos,~,~,acc,angvel,t,~,~] = trajectory2(Fs);
+[pos,~,vel,acc,angvel,t,~,~] = trajectory2(Fs);
 
 % Sensor response
 [accelData, gyroData, magData] = imu(acc, angvel);
+[gps_pos,gps_vel,~,~] = gps(pos,vel);
 
-subplot(3, 2, 1)
+
+n_row = 3;
+n_col = 2;
+subplot(n_row, n_col, 1)
 plot(t, accelData)
 title('Accelerometer')
 xlabel('s')
 ylabel('m/s^2')
 legend('x','y','z')
 
-subplot(3, 2, 2)
+subplot(n_row, n_col, 2)
 plot(t, gyroData)
 title('Gyroscope')
 xlabel('s')
 ylabel('rad/s')
 legend('x','y','z')
 
-subplot(3, 2, 3)
+subplot(n_row, n_col, 3)
 plot(t, magData)
 title('Magnetometer')
 xlabel('s')
 ylabel('uT')
 legend('x','y','z')
 
-subplot(3, 2, 4)
-plot(t, pos(:,1))
+subplot(n_row, n_col, 4)
+hold on
+plot(t, pos(:,1), 'DisplayName','Truth')
+plot(t, gps_pos(:,1), 'DisplayName','GPS')
 title('x Position')
 xlabel('s')
 ylabel('m')
+legend('show','Location','best');
 
-subplot(3, 2, 5)
-plot(t, pos(:,2))
+subplot(n_row, n_col, 5)
+hold on
+plot(t, pos(:,2), 'DisplayName','Truth')
+plot(t, gps_pos(:,2), 'DisplayName','GPS')
 title('y Position')
 xlabel('s')
 ylabel('m')
+legend('show','Location','best');
 
-subplot(3, 2, 6)
-plot(t, pos(:,3))
+subplot(n_row, n_col, 6)
+hold on
+plot(t, pos(:,3), 'DisplayName','Truth')
+plot(t, gps_pos(:,3), 'DisplayName','GPS')
 title('z Position')
 xlabel('s')
 ylabel('m')
+legend('show','Location','best');
 
 % plot(t, angvel(:,1), '--', t, gyroData(:,1))
 % title('Gyroscope')
