@@ -20,10 +20,16 @@ Fs = imu.SampleRate;
 
 % Trajectory 2
 [pos,~,vel,acc,angvel,t,~,~] = trajectory2(Fs);
+% [lat, lon] = local2latlon(pos(:,1), pos(:,2), pos(:,3), gps.ReferenceLocation);
+% lla = [lat lon pos(:,3)]; % Lat, Lon, Alt
 
 % Sensor response
 [accelData, gyroData, magData] = imu(acc, angvel);
-[gps_pos,gps_vel,~,~] = gps(pos,vel);
+[gps_lla,~,~,~] = gps(pos,vel);
+[East,North,Up] = latlon2local(gps_lla(:,1), gps_lla(:,2), gps_lla(:,3), gps.ReferenceLocation);
+gps_pos = [North, East, -Up];
+
+err = gps_pos - pos;
 
 
 n_row = 3;
