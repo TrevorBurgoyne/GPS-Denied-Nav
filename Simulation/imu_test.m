@@ -18,7 +18,7 @@ gpsFs = gps.SampleRate;
 
 
 % Trajectory 1
-% [pos,~,~,acc,angvel,t,~,~] = trajectory1(Fs);
+% [pos,~,~,acc,angvel,t,~,~] = trajectory1(imuFs);
 
 % Trajectory 2
 [pos,~,vel,acc,angvel,t,~,~] = trajectory2(imuFs);
