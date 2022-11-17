@@ -15,10 +15,18 @@
 %=======================================================%
 
 
-load flight_data.mat;        %   Sensor data data
+% load flight_data.mat;        %   Sensor data
+load Trajectory2.mat;
+% imu = [t, gyro_x, gyro_y, gyro_z, acc_x, acc_y, acc_z]
+% gps_pos_lla = [lat (rad), lon (rad), alt (m)]
+% gps_vel_ned = [n (m/s), e (m/s), d (m/s) ]
+% roll = [roll (rad)]
+% pitch = [pitch (rad)]
+% yaw = [yaw (rad)]
+% t = [t (s)]
+% truth_pos_lla = [lat (rad), lon (rad), alt (m)]
 
 %   Establish initial value for inertial sensor biases
-% imu = [t, gyro_x, gyro_y, gyro_z, acc_x, acc_y, acc_z]
 initial_gyro_bias = -mean(imu(1:1000,2:4));
 initial_accel_bias = -(mean(imu(1:1000,5:7)) + [0 0 g]);
 

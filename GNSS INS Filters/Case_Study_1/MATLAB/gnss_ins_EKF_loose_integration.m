@@ -317,7 +317,7 @@ for k = 2:drl
     P = PHI*P*PHI' + Q_k;                         %   Equation (6.27)
     
        
-    if(tu_counter > tu_per_mu && CLOSED_LOOP)   %   Check whether to do a
+    if(CLOSED_LOOP && tu_counter > tu_per_mu)   %   Check whether to do a
                                                 %   measurement update
         
         tu_counter = 0;                         %   Reset time update counter
@@ -356,9 +356,10 @@ for k = 2:drl
        
         %   Update attitude using computed corrections
        
-        Cbn_minus = Cbn;
-        Cbn_plus = (I3 + skew(attFeedBack(k,:)))*Cbn_minus;     %   Equation (6.35)
-        eul_ins(k,:) = [Cbn2eul(Cbn_plus)]';                    %   Equation (6.36) - Equation (6.38)
+          % TODO: fix atan error
+%         Cbn_minus = Cbn;
+%         Cbn_plus = (I3 + skew(attFeedBack(k,:)))*Cbn_minus;     %   Equation (6.35)
+%         eul_ins(k,:) = [Cbn2eul(Cbn_plus)]';                    %   Equation (6.36) - Equation (6.38)
         
         %   Update sensor bias estimates
         

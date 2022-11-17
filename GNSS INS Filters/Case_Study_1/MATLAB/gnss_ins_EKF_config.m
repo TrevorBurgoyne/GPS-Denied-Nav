@@ -15,8 +15,10 @@
 %   The variables t_start and t_end must define a time interval 
 %   between 0 and 14 minutes.  
 
-t_start = 7;
-t_end = 13.5;
+% t_start = 7;
+% t_end = 13.5;
+t_start = 0;
+t_end = 20; 
 
 %   Configure the Extended Kalman Filter (EKF)
 
