@@ -16,7 +16,8 @@
 
 
 % load flight_data.mat;        %   Sensor data
-load Trajectory2.mat;
+% load Trajectory2.mat;
+load '../../../Simulation/Trajectory2.mat'
 % imu = [t, gyro_x, gyro_y, gyro_z, acc_x, acc_y, acc_z]
 % gps_pos_lla = [lat (rad), lon (rad), alt (m)]
 % gps_vel_ned = [n (m/s), e (m/s), d (m/s) ]
@@ -27,8 +28,8 @@ load Trajectory2.mat;
 % truth_pos_lla = [lat (rad), lon (rad), alt (m)]
 
 %   Establish initial value for inertial sensor biases
-initial_gyro_bias = -mean(imu(1:1000,2:4));
-initial_accel_bias = -(mean(imu(1:1000,5:7)) + [0 0 g]);
+initial_gyro_bias = -mean(imu_init(1:1000,2:4));
+initial_accel_bias = -(mean(imu_init(1:1000,5:7)) + [0 0 g]);
 
 %   Find subset of data that falls between t_start and t_end
 

@@ -11,7 +11,7 @@ function [pos, orient, vel, acc, angvel, times, wps, t] = trajectory2(Fs)
     %   will have the full trajectory details at each `times` entry.
 
     [wps1, t1, x0, y0, z0, t0] = launch_trajectory(); % start with the launch
-    tf = 20*60;        % s, end time for a 20 min flight
+    tf = 20*60; % s, end time for a 20 min flight
 
     % Waypoints (m)
     wps2 = [x0+4e3,  y0-1e3,  z0+7e3;  % 1

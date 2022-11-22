@@ -12,30 +12,113 @@
 
 
 close all;
+% load '../../../Simulation/Trajectory2.mat'
+% load './traj2_ekf_output.mat'
+
+% True x/y vs GPS x/y vs Solution x/y
+[East,North,Up] = latlon2local(rad2deg(pos_ins(:,1)), rad2deg(pos_ins(:,2)), pos_ins(:,3), gps.ReferenceLocation);
+pos_ins_local = [North, East, -Up];
+
+% figure()
+% hold on;grid on;axis equal;
+% title('Vehicle Trajectory'); xlabel('x(m)');ylabel('y(m)');
+% plot(pos_ins_local(:,1),pos_ins_local(:,2),'r-', 'DisplayName', 'INS');
+% % plot(gps_pos_local(:,1),gps_pos_local(:,2),'green', 'DisplayName', 'GPS');
+% plot(truth_pos(:,1), truth_pos(:,2),'blue','DisplayName','Truth');
+% legend()
+
+
+% Seperate x,y,z plots
+n_row = 3;
+n_col = 2;
+plot_n = 1;
+
+% Error
+err = pos_ins_local - truth_pos;
+
+% x
+subplot(n_row, n_col, plot_n)
+plot_n = plot_n + 1;
+hold on
+plot(t, err(:,1), 'DisplayName','Error')
+title('x Error')
+xlabel('s')
+ylabel('m')
+legend('show','Location','best');
+
+subplot(n_row, n_col, plot_n)
+plot_n = plot_n + 1;
+hold on
+plot(t, truth_pos(:,1), 'DisplayName','Truth')
+plot(t, pos_ins_local(:,1), 'DisplayName','GNSS/INS')
+title('x Position')
+xlabel('s')
+ylabel('m')
+legend('show','Location','best');
+
+% y
+subplot(n_row, n_col, plot_n)
+plot_n = plot_n + 1;
+hold on
+plot(t, err(:,2), 'DisplayName','Error')
+title('y Error')
+xlabel('s')
+ylabel('m')
+legend('show','Location','best');
+
+subplot(n_row, n_col, plot_n)
+plot_n = plot_n + 1;
+hold on
+plot(t, truth_pos(:,2), 'DisplayName','Truth')
+plot(t, pos_ins_local(:,2), 'DisplayName','GNSS/INS')
+title('y Position')
+xlabel('s')
+ylabel('m')
+legend('show','Location','best');
+
+% z
+subplot(n_row, n_col, plot_n)
+plot_n = plot_n + 1;
+hold on
+plot(t, err(:,3), 'DisplayName','Error')
+title('z Error')
+xlabel('s')
+ylabel('m')
+legend('show','Location','best');
+
+subplot(n_row, n_col, plot_n)
+plot_n = plot_n + 1;
+hold on
+plot(t, truth_pos(:,3), 'DisplayName','Truth')
+plot(t, pos_ins_local(:,3), 'DisplayName','GNSS/INS')
+title('z Position')
+xlabel('s')
+ylabel('m')
+legend('show','Location','best');
 
 %   Figure 1:  Ground Track
 
-% start_lon = gps_pos_lla(1,2)*ones(drl,1);
-% start_lat = gps_pos_lla(1,1)*ones(drl,1);
-start_lon = truth_pos_lla(1,2)*ones(drl,1);
-start_lat = truth_pos_lla(1,1)*ones(drl,1);
-
-lla_east = (gps_pos_lla(:,2)-start_lon);
-lla_north = (gps_pos_lla(:,1)-start_lat);
-
-truth_lla_east = (truth_pos_lla(:,2)-start_lon);
-truth_lla_north = (truth_pos_lla(:,1)-start_lat);
-
-% figure(gcf)
-figure()
-h1 = plot((R_0/cos(start_lat(1)))*lla_east,R_0*lla_north,'r-', 'DisplayName', 'GNSS/INS');
-hold on;grid on;axis equal;
-plot((R_0/cos(start_lat(1)))*truth_lla_east,R_0*truth_lla_north,'blue','DisplayName', 'Truth')
-title('Vehicle Trajectory'); xlabel('East/West (m)');ylabel('North/South (m)');
-set(h1,'LineWidth',2);
-text((R_0/cos(start_lat(1)))*lla_east(1),R_0*lla_north(1),'Start');
-text((R_0/cos(start_lat(1)))*lla_east(end)+1,R_0*lla_north(end),'Stop');
-legend()
+% % start_lon = gps_pos_lla(1,2)*ones(drl,1);
+% % start_lat = gps_pos_lla(1,1)*ones(drl,1);
+% start_lon = truth_pos_lla(1,2)*ones(drl,1);
+% start_lat = truth_pos_lla(1,1)*ones(drl,1);
+% 
+% lla_east = (gps_pos_lla(:,2)-start_lon);
+% lla_north = (gps_pos_lla(:,1)-start_lat);
+% 
+% truth_lla_east = (truth_pos_lla(:,2)-start_lon);
+% truth_lla_north = (truth_pos_lla(:,1)-start_lat);
+% 
+% % figure(gcf)
+% figure()
+% h1 = plot((R_0/cos(start_lat(1)))*lla_east,R_0*lla_north,'r-', 'DisplayName', 'GNSS/INS');
+% hold on;grid on;axis equal;
+% plot((R_0/cos(start_lat(1)))*truth_lla_east,R_0*truth_lla_north,'blue','DisplayName', 'Truth')
+% title('Vehicle Trajectory'); xlabel('East/West (m)');ylabel('North/South (m)');
+% set(h1,'LineWidth',2);
+% text((R_0/cos(start_lat(1)))*lla_east(1),R_0*lla_north(1),'Start');
+% text((R_0/cos(start_lat(1)))*lla_east(end)+1,R_0*lla_north(end),'Stop');
+% legend()
 
 %%   Figure 2:   Attitude Estimates
 
