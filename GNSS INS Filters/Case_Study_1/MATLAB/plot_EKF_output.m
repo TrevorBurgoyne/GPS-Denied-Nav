@@ -28,7 +28,14 @@ pos_ins_local = [North, East, -Up];
 % legend()
 
 
-% Seperate x,y,z plots
+%% 3D True Trajectory
+figure()
+plot3(truth_pos(:,1), truth_pos(:,2), truth_pos(:,3))
+grid on
+title('3D Trajectory')
+xlabel('x(m)');ylabel('y(m)');zlabel('z(m)')
+
+%% Seperate x,y,z plots
 n_row = 3;
 n_col = 2;
 plot_n = 1;
