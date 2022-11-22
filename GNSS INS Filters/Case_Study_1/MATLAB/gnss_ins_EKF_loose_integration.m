@@ -235,8 +235,8 @@ for k = 2:drl
     
     %   Surpress vertical channel in the absence of GNSS measurements
     
-    vel_ins(k,3) = vel_ins(k-1,3);
-    pos_ins(k,3) = pos_ins(k-1,3);
+%     vel_ins(k,3) = vel_ins(k-1,3);
+%     pos_ins(k,3) = pos_ins(k-1,3);
     
     %   Propagate last accel/gyro bias forward in the absence of GNSS
     %   measurements
@@ -349,7 +349,7 @@ for k = 2:drl
 
         pos_ins(k,1) = pos_ins(k,1) - posFeedBack(k,1)/(R_N+pos_ins(k,3));
         pos_ins(k,2) = pos_ins(k,2) - posFeedBack(k,2)/((R_E+pos_ins(k,3))*cos(pos_ins(k,1)));
-        pos_ins(k,3)=  gps_pos_lla(k,3);
+        pos_ins(k,3) = gps_pos_lla(k,3);
 
         vel_ins(k,:) = vel_ins(k,:) - velFeedBack(k,:);
         vel_ins(k,3)=  gps_vel_ned(k,3);

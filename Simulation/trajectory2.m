@@ -3,7 +3,7 @@
 
 function [pos, orient, vel, acc, angvel, times, wps, t] = trajectory2(Fs)
     % waypointTrajectory for a kinda random 20 min test trajectory.
-    %   USAGE: `[position,orientation,velocity,acceleration,angularVelocity,wps,t] = trajectory1(Fs);` 
+    %   USAGE: `[position,orientation,velocity,acceleration,angularVelocity,times,wps,t] = trajectory1(Fs);` 
     %   will initialize a waypointTrajectory object with the pre-defined waypoints in this
     %   file, with Fs being the sample rate (Hz). wps is a list of the
     %   waypoints and t contains the corresponding times when those
@@ -14,26 +14,26 @@ function [pos, orient, vel, acc, angvel, times, wps, t] = trajectory2(Fs)
     tf = 20*60; % s, end time for a 20 min flight
 
     % Waypoints (m)
-    wps2 = [x0+4e3,  y0-1e3,  z0+7e3;  % 1
-            x0+5e3,  y0+2e3,  z0+9e3;  % 2
-            x0+8e3,  y0+4e3,  z0+4e3;  % 3
-            x0+14e3, y0-1e3,  z0+9e3;  % 4
-            x0+18e3, y0-5e3,  z0+7e3;  % 5
-            x0+25e3, y0-7e3,  z0+10e3; % 6
-            x0+33e3, y0-9e3,  z0+14e3; % 7
-            x0+38e3, y0-11e3, z0+14e3; % 8
-            x0+45e3, y0-7e3,  z0+7e3;  % 9
-            x0+46e3, y0-6e3,  z0+20e3; % 10
-            x0+55e3, y0-4e3,  z0+23e3; % 11
-            x0+59e3, y0-1e3,  z0+18e3; % 12
-            x0+69e3, y0+5e3,  z0+18e3; % 13
-            x0+61e3, y0+10e3, z0+18e3; % 14
-            x0+69e3, y0+11e3, z0+25e3; % 15
-            x0+74e3, y0+15e3, z0+28e3; % 16
-            x0+80e3, y0+14e3, z0+27e3; % 17
-            x0+83e3, y0+16e3, z0+28e3; % 18
-            x0+88e3, y0+16e3, z0+30e3; % 19
-            x0+91e3, y0+18e3, z0+33e3; % 20
+    wps2 = [x0+3e3,  y0-1e3,  z0+4e3;  % 1
+            x0+6e3,  y0+0e3,  z0+5e3;  % 2
+            x0+9e3,  y0+1e3,  z0+4e3;  % 3
+            x0+13e3, y0-1e3,  z0+6e3;  % 4
+            x0+17e3, y0-3e3,  z0+7e3;  % 5
+            x0+21e3, y0-4e3,  z0+9e3;  % 6
+            x0+25e3, y0-6e3,  z0+10e3; % 7
+            x0+28e3, y0-8e3,  z0+11e3; % 8
+            x0+31e3, y0-9e3,  z0+10e3; % 9
+            x0+35e3, y0-8e3,  z0+12e3; % 10
+            x0+39e3, y0-7e3,  z0+13e3; % 11
+            x0+41e3, y0-5e3,  z0+14e3; % 12
+            x0+43e3, y0-4e3,  z0+14e3; % 13
+            x0+46e3, y0-2e3,  z0+14e3; % 14
+            x0+49e3, y0+0e3,  z0+15e3; % 15
+            x0+52e3, y0+1e3,  z0+17e3; % 16
+            x0+55e3, y0+2e3,  z0+17e3; % 17
+            x0+58e3, y0+3e3,  z0+18e3; % 18
+            x0+62e3, y0+5e3,  z0+20e3; % 19
+            x0+66e3, y0+7e3,  z0+21e3; % 20
     ];
     wps = [wps1', wps2']'; % append to launch
     
