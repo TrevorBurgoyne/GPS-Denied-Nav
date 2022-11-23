@@ -36,6 +36,7 @@ title('3D Trajectory')
 xlabel('x(m)');ylabel('y(m)');zlabel('z(m)')
 
 %% Seperate x,y,z plots
+figure()
 n_row = 3;
 n_col = 2;
 plot_n = 1;

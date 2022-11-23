@@ -3,7 +3,7 @@
 
 imu   = imu_model();
 % imuFs = imu.SampleRate;
-imuFs = 50; % Hz
+imuFs = 50; % Hz, to ease computation time
 
 gps   = gps_model();
 gpsFs = gps.SampleRate;
@@ -19,16 +19,19 @@ gpsFs = gps.SampleRate;
 
 
 % Trajectory 1
-% [pos,~,~,acc,angvel,t,~,~] = trajectory1(imuFs);
+[pos,orient,vel,acc,angvel,t,~,~] = trajectory1(imuFs);
+eul = quat2eul(orient); % rad, [Roll, Pitch, Yaw]
+save_name = 'Trajectory1';
 
 % Trajectory 2
-[pos,orient,vel,acc,angvel,t,~,~] = trajectory2(imuFs);
-[~,~,~,init_acc,init_angvel,init_t,~,~] = init_trajectory(imuFs);
-eul = quat2eul(orient); % rad, [Roll, Pitch, Yaw]
-save_name = 'Trajectory2';
+% [pos,orient,vel,acc,angvel,t,~,~] = trajectory2(imuFs);
+% eul = quat2eul(orient); % rad, [Roll, Pitch, Yaw]
+% save_name = 'Trajectory2';
 
 % IMU
 [accelData, gyroData, magData] = imu(acc, angvel);
+
+[~,~,~,init_acc,init_angvel,init_t,~,~] = init_trajectory(imuFs);
 [init_accelData, init_gyroData, init_magData] = imu(init_acc, init_angvel);
 
 % GPS
