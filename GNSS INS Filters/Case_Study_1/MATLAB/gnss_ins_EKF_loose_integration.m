@@ -356,10 +356,9 @@ for k = 2:drl
        
         %   Update attitude using computed corrections
        
-          % TODO: fix atan error
-%         Cbn_minus = Cbn;
-%         Cbn_plus = (I3 + skew(attFeedBack(k,:)))*Cbn_minus;     %   Equation (6.35)
-%         eul_ins(k,:) = [Cbn2eul(Cbn_plus)]';                    %   Equation (6.36) - Equation (6.38)
+        Cbn_minus = Cbn;
+        Cbn_plus = (I3 + skew(attFeedBack(k,:)))*Cbn_minus;     %   Equation (6.35)
+        eul_ins(k,:) = [Cbn2eul(Cbn_plus)]';                    %   Equation (6.36) - Equation (6.38)
         
         %   Update sensor bias estimates
         

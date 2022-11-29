@@ -19,14 +19,14 @@ gpsFs = gps.SampleRate;
 
 
 % Trajectory 1
-[pos,orient,vel,acc,angvel,t,~,~] = trajectory1(imuFs);
-eul = quat2eul(orient); % rad, [Roll, Pitch, Yaw]
-save_name = 'Trajectory1';
+% [pos,orient,vel,acc,angvel,t,~,~] = trajectory1(imuFs);
+% eul = quat2eul(orient); % rad, [Roll, Pitch, Yaw]
+% save_name = 'Trajectory1';
 
 % Trajectory 2
-% [pos,orient,vel,acc,angvel,t,~,~] = trajectory2(imuFs);
-% eul = quat2eul(orient); % rad, [Roll, Pitch, Yaw]
-% save_name = 'Trajectory2';
+[pos,orient,vel,acc,angvel,t,~,~] = trajectory2(imuFs);
+eul = quat2eul(orient); % rad, [Roll, Pitch, Yaw]
+save_name = 'Trajectory2';
 
 % IMU
 [accelData, gyroData, magData] = imu(acc, angvel);
