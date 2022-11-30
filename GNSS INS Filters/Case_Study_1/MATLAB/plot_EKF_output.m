@@ -130,29 +130,28 @@ legend('show','Location','best');
 
 %%   Figure 2:   Attitude Estimates
 
-% figure(gcf+1)
-% figure()
-% subplot(311)
-% plot(t/60,yaw,'r-',t/60,eul_ins(:,3)*r2d,'b-','linewidth',2);
-% legend('MIDG II Solution','GNSS/INS solution');
-% title('Yaw angle');
-% xlabel('time (min)');
-% ylabel('\psi (deg)');
-% grid on;
-%     
-% subplot(312)
-% plot(t/60,pitch,'r-',t/60,eul_ins(:,2)*r2d,'b-','linewidth',2);
-% title('Pitch angle');
-% xlabel('time (min)');
-% ylabel('\theta (deg)');
-% grid on;
-% 
-% subplot(313)
-% plot(t/60,roll,'r-',t/60,eul_ins(:,1)*r2d,'b-','linewidth',2);
-% title('Roll angle');
-% xlabel('time (min)');
-% ylabel('\phi (deg)');
-% grid on;
+figure()
+subplot(311)
+plot(t/60,yaw,'r-',t/60,eul_ins(:,3)*r2d,'b-','linewidth',2);
+legend('MIDG II Solution','GNSS/INS solution');
+title('Yaw angle');
+xlabel('time (min)');
+ylabel('\psi (deg)');
+grid on;
+    
+subplot(312)
+plot(t/60,pitch,'r-',t/60,eul_ins(:,2)*r2d,'b-','linewidth',2);
+title('Pitch angle');
+xlabel('time (min)');
+ylabel('\theta (deg)');
+grid on;
+
+subplot(313)
+plot(t/60,roll,'r-',t/60,eul_ins(:,1)*r2d,'b-','linewidth',2);
+title('Roll angle');
+xlabel('time (min)');
+ylabel('\phi (deg)');
+grid on;
 
 %%   Figure 3:   Sensor Bias Estimates
 
