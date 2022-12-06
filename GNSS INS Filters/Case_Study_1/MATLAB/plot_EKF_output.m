@@ -130,6 +130,8 @@ legend('show','Location','best');
 
 %%   Figure 2:   Attitude Estimates
 
+hold off
+% figure(gcf+1)
 figure()
 subplot(311)
 plot(t/60,yaw,'r-',t/60,eul_ins(:,3)*r2d,'b-','linewidth',2);
@@ -153,6 +155,63 @@ xlabel('time (min)');
 ylabel('\phi (deg)');
 grid on;
 
+hold off
+%% Velocity and Acceleration Plots
+figure
+subplot(311)
+plot(t/60, vel_ins(:,1), 'DisplayName', 'North')
+title('North Instantaneous Velocity')
+xlabel('Time (min)')
+ylabel('Velocity (m/s)')
+grid on
+grid minor
+
+subplot(312)
+plot(t/60, vel_ins(:,2), 'DisplayName', 'East')
+title('East Instantaneous Velocity')
+xlabel('Time (min)')
+ylabel('Velocity (m/s)')
+grid on
+grid minor
+
+subplot(313)
+plot(t/60, vel_ins(:,3), 'DisplayName', 'Down')
+title('Down Instantaneous Velocity')
+xlabel('Time (min)')
+ylabel('Velocity (m/s)')
+grid on
+grid minor
+
+hold off
+
+% Acceleration Plots
+
+figure
+subplot(311)
+plot(t/60, accelBias(:,1), 'DisplayName', 'North')
+title('North Acceleration')
+xlabel('Time (min)')
+ylabel('Acceleration (m/s/s)')
+grid on
+grid minor
+
+subplot(312)
+plot(t/60, accelBias(:,2), 'DisplayName', 'East')
+title('East Acceleration')
+xlabel('Time (min)')
+ylabel('Acceleration (m/s/s)')
+grid on
+grid minor
+
+subplot(313)
+plot(t/60, accelBias(:,3), 'DisplayName', 'Down')
+title('Down Acceleration')
+xlabel('Time (min)')
+ylabel('Acceleration (m/s/s)')
+grid on
+grid minor
+
+hold off
 %%   Figure 3:   Sensor Bias Estimates
 
 % figure(gcf+1)
