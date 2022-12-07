@@ -1,0 +1,199 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>IMU Model</title><meta name="generator" content="MATLAB 9.9"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-12-06"><meta name="DC.source" content="imu_model.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>IMU Model</h1><!--introduction--><p>GPS Denied Navigation, AEM 4331 Fall 2022 Parameters taken from HG1125CA01 datasheet: <a href="https://aerospace.honeywell.com/content/dam/aerobt/en/documents/learn/products/sensors/brochures/N61-2427-000-001_HG1125_HG1126-bro.pdf">https://aerospace.honeywell.com/content/dam/aerobt/en/documents/learn/products/sensors/brochures/N61-2427-000-001_HG1125_HG1126-bro.pdf</a></p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">IMU</a></li></ul></div><h2 id="1">IMU</h2><pre class="codeinput"><span class="keyword">function</span> imu = imu_model(sample_rate)
+    <span class="comment">% imuSensor model for a HG1125CA01 sensor.</span>
+    <span class="comment">%   USAGE: `imu = imu_model();` will initialize a imuSensor model</span>
+    <span class="comment">%   object with the default HG1125CA01 parameters. The sample rate (Fs)</span>
+    <span class="comment">%   can also be adjusted using `imu = imu_model(Fs);`</span>
+
+    <span class="comment">% Gryo</span>
+    gyro_bias_repeatability    = 120; <span class="comment">% deg/hr</span>
+    gyro_bias_in_run_stability = 7;   <span class="comment">% deg/hr</span>
+    gyro_arw                   = 0.3;  <span class="comment">% deg/sqrt(hr)</span>
+
+    <span class="comment">% Convert to param units</span>
+    gyro_bias_instability = conversions.deg_per_hr_to_rad_per_sec(gyro_bias_in_run_stability); <span class="comment">% rad/s</span>
+    gyro_noise_density    = conversions.deg_per_sqrt_hr_to_rad_per_sqrt_sec(gyro_arw);         <span class="comment">% rad/sqrt(s</span>
+
+    <span class="comment">% Init gyroparams object</span>
+    gyro_params = gyroparams(<span class="keyword">...</span>
+        <span class="string">'BiasInstability'</span>, gyro_bias_instability, <span class="keyword">...</span><span class="comment"> % rad/s, Instability of the bias offset</span>
+        <span class="string">'NoiseDensity'</span>,    gyro_noise_density     <span class="keyword">...</span><span class="comment"> % rad/sqrt(s), Power spectral density of sensor noise</span>
+    );
+
+    <span class="comment">% Accelerometer</span>
+    acc_bias_repeatability     = 1.5; <span class="comment">% mg</span>
+    acc_bias_in_run_stability  = 7;   <span class="comment">% mg</span>
+    acc_vrw                    = .18; <span class="comment">% fps/sqrt(hr)</span>
+
+    <span class="comment">% Convert to param units</span>
+    acc_bias_instability = conversions.mg_to_m_per_s_squared(acc_bias_in_run_stability);   <span class="comment">% m/s^2</span>
+    acc_noise_density    = conversions.fps_per_sqrt_hr_to_m_per_sec_per_sqrt_sec(acc_vrw); <span class="comment">% m/s/sqrt(s) or m/s^2/sqrt(Hz)</span>
+
+    <span class="comment">% Init accelparams object</span>
+    accel_params = accelparams(<span class="keyword">...</span>
+        <span class="string">'BiasInstability'</span>, acc_bias_instability, <span class="keyword">...</span><span class="comment"> % m/s^2, Instability of the bias offset</span>
+        <span class="string">'NoiseDensity'</span>,    acc_noise_density     <span class="keyword">...</span><span class="comment"> % m/s^2/sqrt(Hz), Power spectral density of sensor noise</span>
+    );
+
+    Fs = 300; <span class="comment">% Hz, default sampling rate. 600Hz/100Hz (configurable to 1800Hz/300Hz)</span>
+
+    <span class="comment">% Constructor</span>
+    <span class="keyword">if</span> nargin &gt; 0
+        Fs = sample_rate;
+    <span class="keyword">end</span>
+
+    imu = imuSensor(<span class="keyword">...</span>
+      <span class="string">'accel-gyro-mag'</span>, <span class="keyword">...</span>
+      <span class="string">'ReferenceFrame'</span>, <span class="string">'NED'</span>, <span class="keyword">...</span>
+      <span class="string">'SampleRate'</span>, Fs, <span class="keyword">...</span>
+      <span class="string">'Gyroscope'</span>, gyro_params, <span class="keyword">...</span>
+      <span class="string">'Accelerometer'</span>, accel_params <span class="keyword">...</span>
+    );
+
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">
+ans = 
+
+  imuSensor with properties:
+
+          IMUType: 'accel-gyro-mag'
+       SampleRate: 300
+      Temperature: 25
+    MagneticField: [27.5550 -2.4169 -16.0849]
+    Accelerometer: [1&times;1 accelparams]
+        Gyroscope: [1&times;1 gyroparams]
+     Magnetometer: [1&times;1 magparams]
+     RandomStream: 'Global stream'
+
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2020b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% IMU Model
+% GPS Denied Navigation, AEM 4331 Fall 2022
+% Parameters taken from HG1125CA01 datasheet: 
+% https://aerospace.honeywell.com/content/dam/aerobt/en/documents/learn/products/sensors/brochures/N61-2427-000-001_HG1125_HG1126-bro.pdf
+
+%% IMU
+function imu = imu_model(sample_rate)
+    % imuSensor model for a HG1125CA01 sensor.
+    %   USAGE: `imu = imu_model();` will initialize a imuSensor model
+    %   object with the default HG1125CA01 parameters. The sample rate (Fs)
+    %   can also be adjusted using `imu = imu_model(Fs);`
+        
+    % Gryo
+    gyro_bias_repeatability    = 120; % deg/hr
+    gyro_bias_in_run_stability = 7;   % deg/hr
+    gyro_arw                   = 0.3;  % deg/sqrt(hr)
+    
+    % Convert to param units
+    gyro_bias_instability = conversions.deg_per_hr_to_rad_per_sec(gyro_bias_in_run_stability); % rad/s
+    gyro_noise_density    = conversions.deg_per_sqrt_hr_to_rad_per_sqrt_sec(gyro_arw);         % rad/sqrt(s
+    
+    % Init gyroparams object
+    gyro_params = gyroparams(...
+        'BiasInstability', gyro_bias_instability, ... % rad/s, Instability of the bias offset 
+        'NoiseDensity',    gyro_noise_density     ... % rad/sqrt(s), Power spectral density of sensor noise                               
+    );
+
+    % Accelerometer
+    acc_bias_repeatability     = 1.5; % mg
+    acc_bias_in_run_stability  = 7;   % mg
+    acc_vrw                    = .18; % fps/sqrt(hr)
+    
+    % Convert to param units
+    acc_bias_instability = conversions.mg_to_m_per_s_squared(acc_bias_in_run_stability);   % m/s^2
+    acc_noise_density    = conversions.fps_per_sqrt_hr_to_m_per_sec_per_sqrt_sec(acc_vrw); % m/s/sqrt(s) or m/s^2/sqrt(Hz)
+    
+    % Init accelparams object
+    accel_params = accelparams(...
+        'BiasInstability', acc_bias_instability, ... % m/s^2, Instability of the bias offset 
+        'NoiseDensity',    acc_noise_density     ... % m/s^2/sqrt(Hz), Power spectral density of sensor noise 
+    );
+
+    Fs = 300; % Hz, default sampling rate. 600Hz/100Hz (configurable to 1800Hz/300Hz)
+    
+    % Constructor
+    if nargin > 0
+        Fs = sample_rate;
+    end
+
+    imu = imuSensor(...
+      'accel-gyro-mag', ...
+      'ReferenceFrame', 'NED', ...
+      'SampleRate', Fs, ...
+      'Gyroscope', gyro_params, ...
+      'Accelerometer', accel_params ...
+    );
+      
+end
+
+
+##### SOURCE END #####
+--></body></html>

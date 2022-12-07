@@ -28,6 +28,12 @@ gpsFs = gps.SampleRate;
 eul = quat2eul(orient); % rad, [Roll, Pitch, Yaw]
 save_name = 'Trajectory2';
 
+% Speed
+speeds = vecnorm(vel');
+avg_speed = mean(speeds);
+min_speed = min(speeds);
+max_speed = max(speeds);
+
 % IMU
 [accelData, gyroData, magData] = imu(acc, angvel);
 
@@ -86,7 +92,8 @@ save(save_name,...
     'yaw',...
     't',...
     'truth_pos_lla',...
-    'truth_pos'...
+    'truth_pos',...
+    'vel'...
 );
 %% Plot
 
@@ -116,7 +123,7 @@ legend('x','y','z')
 subplot(n_row, n_col, 4)
 hold on
 plot(t, pos(:,1), 'DisplayName','Truth')
-% plot(t, gps_pos_local(:,1), 'DisplayName','GPS')
+plot(t, gps_pos_local(:,1), 'DisplayName','GPS')
 title('x Position')
 xlabel('s')
 ylabel('m')
@@ -125,7 +132,7 @@ legend('show','Location','best');
 subplot(n_row, n_col, 5)
 hold on
 plot(t, pos(:,2), 'DisplayName','Truth')
-% plot(t, gps_pos_local(:,2), 'DisplayName','GPS')
+plot(t, gps_pos_local(:,2), 'DisplayName','GPS')
 title('y Position')
 xlabel('s')
 ylabel('m')
@@ -134,7 +141,7 @@ legend('show','Location','best');
 subplot(n_row, n_col, 6)
 hold on
 plot(t, pos(:,3), 'DisplayName','Truth')
-% plot(t, gps_pos_local(:,3), 'DisplayName','GPS')
+plot(t, gps_pos_local(:,3), 'DisplayName','GPS')
 title('z Position')
 xlabel('s')
 ylabel('m')

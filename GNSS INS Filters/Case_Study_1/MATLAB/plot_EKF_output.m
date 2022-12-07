@@ -157,26 +157,69 @@ grid on;
 
 hold off
 %% Velocity and Acceleration Plots
+% Error
+err = vel_ins - vel;
+
 figure
-subplot(311)
-plot(t/60, vel_ins(:,1), 'DisplayName', 'North')
-title('North Instantaneous Velocity')
+n_row = 3;
+n_col = 2;
+plot_n = 1;
+
+% x
+subplot(n_row, n_col, plot_n)
+plot_n = plot_n + 1;
+plot(t/60, err(:,1), 'DisplayName', 'Error')
+title('x Velocity Error')
 xlabel('Time (min)')
 ylabel('Velocity (m/s)')
 grid on
 grid minor
 
-subplot(312)
-plot(t/60, vel_ins(:,2), 'DisplayName', 'East')
-title('East Instantaneous Velocity')
+subplot(n_row, n_col, plot_n)
+plot_n = plot_n + 1;
+plot(t/60, vel_ins(:,1), 'DisplayName', 'GNSS/INS')
+plot(t/60, vel(:,1), 'DisplayName', 'Truth')
+title('x Velocity')
 xlabel('Time (min)')
 ylabel('Velocity (m/s)')
 grid on
 grid minor
 
-subplot(313)
-plot(t/60, vel_ins(:,3), 'DisplayName', 'Down')
-title('Down Instantaneous Velocity')
+% y
+subplot(n_row, n_col, plot_n)
+plot_n = plot_n + 1;
+plot(t/60, err(:,2), 'DisplayName', 'Error')
+title('y Velocity Error')
+xlabel('Time (min)')
+ylabel('Velocity (m/s)')
+grid on
+grid minor
+
+subplot(n_row, n_col, plot_n)
+plot_n = plot_n + 1;
+plot(t/60, vel_ins(:,2), 'DisplayName', 'GNSS/INS')
+plot(t/60, vel(:,2), 'DisplayName', 'Truth')
+title('y Velocity')
+xlabel('Time (min)')
+ylabel('Velocity (m/s)')
+grid on
+grid minor
+
+% z
+subplot(n_row, n_col, plot_n)
+plot_n = plot_n + 1;
+plot(t/60, err(:,3), 'DisplayName', 'Error')
+title('z Velocity Error')
+xlabel('Time (min)')
+ylabel('Velocity (m/s)')
+grid on
+grid minor
+
+subplot(n_row, n_col, plot_n)
+plot_n = plot_n + 1;
+plot(t/60, vel_ins(:,3), 'DisplayName', 'GNSS/INS')
+plot(t/60, vel(:,3), 'DisplayName', 'Truth')
+title('z Velocity')
 xlabel('Time (min)')
 ylabel('Velocity (m/s)')
 grid on

@@ -1,0 +1,208 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Test Trajectory 2</title><meta name="generator" content="MATLAB 9.9"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-12-06"><meta name="DC.source" content="trajectory2.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Test Trajectory 2</h1><p>GPS Denied Navigation, AEM 4331 Fall 2022</p><pre class="codeinput"><span class="keyword">function</span> [pos, orient, vel, acc, angvel, times, wps, t] = trajectory2(Fs)
+    <span class="comment">% waypointTrajectory for a kinda random 20 min test trajectory.</span>
+    <span class="comment">%   USAGE: `[position,orientation,velocity,acceleration,angularVelocity,times,wps,t] = trajectory1(Fs);`</span>
+    <span class="comment">%   will initialize a waypointTrajectory object with the pre-defined waypoints in this</span>
+    <span class="comment">%   file, with Fs being the sample rate (Hz). wps is a list of the</span>
+    <span class="comment">%   waypoints and t contains the corresponding times when those</span>
+    <span class="comment">%   waypoints are reached. `pos, orient, vel, acc, angvel, times`</span>
+    <span class="comment">%   will have the full trajectory details at each `times` entry.</span>
+
+    [wps1, t1, x0, y0, z0, t0] = launch_trajectory(); <span class="comment">% start with the launch</span>
+    tf = 20*60; <span class="comment">% s, end time for a 20 min flight</span>
+
+    <span class="comment">% Waypoints (m)</span>
+    wps2 = [x0+3e3,  y0-1e3,  z0+4e3;  <span class="comment">% 1</span>
+            x0+6e3,  y0+0e3,  z0+5e3;  <span class="comment">% 2</span>
+            x0+9e3,  y0+1e3,  z0+4e3;  <span class="comment">% 3</span>
+            x0+13e3, y0-1e3,  z0+6e3;  <span class="comment">% 4</span>
+            x0+17e3, y0-3e3,  z0+7e3;  <span class="comment">% 5</span>
+            x0+21e3, y0-4e3,  z0+9e3;  <span class="comment">% 6</span>
+            x0+25e3, y0-6e3,  z0+10e3; <span class="comment">% 7</span>
+            x0+28e3, y0-8e3,  z0+11e3; <span class="comment">% 8</span>
+            x0+31e3, y0-9e3,  z0+10e3; <span class="comment">% 9</span>
+            x0+35e3, y0-8e3,  z0+12e3; <span class="comment">% 10</span>
+            x0+39e3, y0-7e3,  z0+13e3; <span class="comment">% 11</span>
+            x0+41e3, y0-5e3,  z0+14e3; <span class="comment">% 12</span>
+            x0+43e3, y0-4e3,  z0+14e3; <span class="comment">% 13</span>
+            x0+46e3, y0-2e3,  z0+14e3; <span class="comment">% 14</span>
+            x0+49e3, y0+0e3,  z0+15e3; <span class="comment">% 15</span>
+            x0+52e3, y0+1e3,  z0+17e3; <span class="comment">% 16</span>
+            x0+55e3, y0+2e3,  z0+17e3; <span class="comment">% 17</span>
+            x0+58e3, y0+3e3,  z0+18e3; <span class="comment">% 18</span>
+            x0+62e3, y0+5e3,  z0+20e3; <span class="comment">% 19</span>
+            x0+66e3, y0+7e3,  z0+21e3; <span class="comment">% 20</span>
+    ];
+    wps = [wps1', wps2']'; <span class="comment">% append to launch</span>
+
+    <span class="comment">% Times (s)</span>
+    t2  = [t0 +  1*60; <span class="comment">% 1</span>
+           t0 +  2*60; <span class="comment">% 2</span>
+           t0 +  3*60; <span class="comment">% 3</span>
+           t0 +  4*60; <span class="comment">% 4</span>
+           t0 +  5*60; <span class="comment">% 5</span>
+           t0 +  6*60; <span class="comment">% 6</span>
+           t0 +  7*60; <span class="comment">% 7</span>
+           t0 +  8*60; <span class="comment">% 8</span>
+           t0 +  9*60; <span class="comment">% 9</span>
+           t0 + 10*60; <span class="comment">% 10</span>
+           t0 + 11*60; <span class="comment">% 11</span>
+           t0 + 12*60; <span class="comment">% 12</span>
+           t0 + 13*60; <span class="comment">% 13</span>
+           t0 + 14*60; <span class="comment">% 14</span>
+           t0 + 15*60; <span class="comment">% 15</span>
+           t0 + 16*60; <span class="comment">% 16</span>
+           t0 + 17*60; <span class="comment">% 17</span>
+           t0 + 18*60; <span class="comment">% 18</span>
+           t0 + 19*60; <span class="comment">% 19</span>
+           tf];        <span class="comment">% 20</span>
+    t = [t1', t2']'; <span class="comment">% append to launch</span>
+
+    traj = waypointTrajectory(wps, t, <span class="string">'SampleRate'</span>, Fs);
+    <span class="comment">% traj = waypointTrajectory(wps, t, 'SampleRate', Fs, 'AutoBank', true, 'AutoPitch', true);</span>
+    times = t(1):1/Fs:t(end);
+    [pos, orient, vel, acc, angvel] = lookupPose(traj, times);
+<span class="keyword">end</span>
+</pre><pre class="codeoutput error">Not enough input arguments.
+
+Error in trajectory2 (line 63)
+    traj = waypointTrajectory(wps, t, 'SampleRate', Fs);
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2020b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Test Trajectory 2
+% GPS Denied Navigation, AEM 4331 Fall 2022
+
+function [pos, orient, vel, acc, angvel, times, wps, t] = trajectory2(Fs)
+    % waypointTrajectory for a kinda random 20 min test trajectory.
+    %   USAGE: `[position,orientation,velocity,acceleration,angularVelocity,times,wps,t] = trajectory1(Fs);` 
+    %   will initialize a waypointTrajectory object with the pre-defined waypoints in this
+    %   file, with Fs being the sample rate (Hz). wps is a list of the
+    %   waypoints and t contains the corresponding times when those
+    %   waypoints are reached. `pos, orient, vel, acc, angvel, times`
+    %   will have the full trajectory details at each `times` entry.
+
+    [wps1, t1, x0, y0, z0, t0] = launch_trajectory(); % start with the launch
+    tf = 20*60; % s, end time for a 20 min flight
+
+    % Waypoints (m)
+    wps2 = [x0+3e3,  y0-1e3,  z0+4e3;  % 1
+            x0+6e3,  y0+0e3,  z0+5e3;  % 2
+            x0+9e3,  y0+1e3,  z0+4e3;  % 3
+            x0+13e3, y0-1e3,  z0+6e3;  % 4
+            x0+17e3, y0-3e3,  z0+7e3;  % 5
+            x0+21e3, y0-4e3,  z0+9e3;  % 6
+            x0+25e3, y0-6e3,  z0+10e3; % 7
+            x0+28e3, y0-8e3,  z0+11e3; % 8
+            x0+31e3, y0-9e3,  z0+10e3; % 9
+            x0+35e3, y0-8e3,  z0+12e3; % 10
+            x0+39e3, y0-7e3,  z0+13e3; % 11
+            x0+41e3, y0-5e3,  z0+14e3; % 12
+            x0+43e3, y0-4e3,  z0+14e3; % 13
+            x0+46e3, y0-2e3,  z0+14e3; % 14
+            x0+49e3, y0+0e3,  z0+15e3; % 15
+            x0+52e3, y0+1e3,  z0+17e3; % 16
+            x0+55e3, y0+2e3,  z0+17e3; % 17
+            x0+58e3, y0+3e3,  z0+18e3; % 18
+            x0+62e3, y0+5e3,  z0+20e3; % 19
+            x0+66e3, y0+7e3,  z0+21e3; % 20
+    ];
+    wps = [wps1', wps2']'; % append to launch
+    
+    % Times (s)
+    t2  = [t0 +  1*60; % 1
+           t0 +  2*60; % 2
+           t0 +  3*60; % 3
+           t0 +  4*60; % 4
+           t0 +  5*60; % 5
+           t0 +  6*60; % 6
+           t0 +  7*60; % 7
+           t0 +  8*60; % 8
+           t0 +  9*60; % 9
+           t0 + 10*60; % 10
+           t0 + 11*60; % 11
+           t0 + 12*60; % 12
+           t0 + 13*60; % 13
+           t0 + 14*60; % 14
+           t0 + 15*60; % 15
+           t0 + 16*60; % 16
+           t0 + 17*60; % 17
+           t0 + 18*60; % 18
+           t0 + 19*60; % 19    
+           tf];        % 20
+    t = [t1', t2']'; % append to launch
+    
+    traj = waypointTrajectory(wps, t, 'SampleRate', Fs);
+    % traj = waypointTrajectory(wps, t, 'SampleRate', Fs, 'AutoBank', true, 'AutoPitch', true);
+    times = t(1):1/Fs:t(end);
+    [pos, orient, vel, acc, angvel] = lookupPose(traj, times);
+end
+##### SOURCE END #####
+--></body></html>
