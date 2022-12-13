@@ -54,6 +54,13 @@ function d = PropagateOrbitsFromTLEs( tleFile, timeVec, hasHeader )
 %          Isaac Nistler, 2022
 %          Justin Dang, 2022
 
+% Path to celestrak tools
+if(ispc)                                    
+    addpath  '.\celestrak-utils\';
+else
+    addpath './celestrak-utils/';
+end
+
 if nargin<1
   tleFile = 'starlink.txt'; % assuming you have this file on your path
 end
@@ -94,7 +101,7 @@ ddeps = -0.003875 * conv;
 
 
 %% for each TLE in the list...
-%%nTLE = 10; % Hard Coded to Test
+% nTLE = 10; % Hard Coded to Test
 for k=1:nTLE
 
   if index(k)>length(lines)
